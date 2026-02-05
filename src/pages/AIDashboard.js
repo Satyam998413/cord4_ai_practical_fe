@@ -25,9 +25,10 @@ const AIDashboard = () => {
   };
 
   const getData = useCallback(async () => {
+
     setLoading(true);
     try {
-      const res = await axios.get(`${apiUrl}/about`);
+      const res = await axios.get(`${apiUrl}/about`,{data});
       setData(res.data);
     } catch (err) {
       console.error("Error fetching data:", err);
