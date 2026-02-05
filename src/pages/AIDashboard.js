@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const apiUrl = "http://localhost:5000/api";
+const apiUrl = "https://cord4-ai-practical-be.vercel.app/api";
 
 const AIDashboard = () => {
   const [prompt, setPrompt] = useState("");
