@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 const apiUrl = "https://cord4-ai-practical-be.vercel.app/api";
 
@@ -7,6 +7,7 @@ const AIDashboard = () => {
   const [image, setImage] = useState(null);
   const [video, setVideo] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [data, setData] = useState(null);
 
   const generateImage = async () => {
     if (!prompt) return;
@@ -14,10 +15,7 @@ const AIDashboard = () => {
 
     const res = await fetch(`${apiUrl}/image/generate`, {
       method: "POST",
-      headers: { 
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*"
-       },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ prompt }),
     });
 
@@ -26,6 +24,29 @@ const AIDashboard = () => {
     setVideo(null);
     setLoading(false);
   };
+
+  const getData = useCallback(async () => {
+    setLoading(true);
+
+    const res = await fetch(`${apiUrl}/image/get-data`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+     
+    });
+
+    const data = await res.json();
+    setData(data);
+    setLoading(false);
+  }, [setData]);
+
+  useEffect(() => {
+    getData()
+  
+    return () => {
+      
+    }
+  }, [getData])
+  
 
   const generateVideo = async () => {
     setLoading(true);
@@ -46,12 +67,12 @@ const AIDashboard = () => {
       {/* Header */}
       <header className="border-b border-gray-800 p-4 text-center text-lg font-semibold">
         AI Image → Video Generator
+       
       </header>
 
       {/* Main */}
       <main className="flex-1 flex justify-center px-4 py-10">
         <div className="w-full max-w-3xl space-y-6">
-          
           {/* Prompt Box */}
           <div className="bg-gray-800 rounded-xl p-4 shadow">
             <textarea
@@ -103,19 +124,16 @@ const AIDashboard = () => {
           {/* Video Preview */}
           {video && (
             <div className="bg-gray-800 rounded-xl p-4 shadow">
-              <video
-                src={video}
-                controls
-                className="rounded-lg w-full"
-              />
+              <video src={video} controls className="rounded-lg w-full" />
             </div>
           )}
         </div>
+       
       </main>
 
       {/* Footer */}
       <footer className="text-center text-xs text-gray-500 py-4">
-        Built with React, Node.js & AI
+        Built with React, Node.js & AI  <div> Data: {JSON.stringify(data)}</div>
       </footer>
     </div>
   );
