@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
+import axios from "axios";
+import { apiUrl } from "../const/api";
 
-const apiUrl = "https://cord4-ai-practical-be.vercel.app/api";
 
 const AIDashboard = () => {
   const [prompt, setPrompt] = useState("");
@@ -13,53 +14,48 @@ const AIDashboard = () => {
     if (!prompt) return;
     setLoading(true);
 
-    const res = await fetch(`${apiUrl}/image/generate`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt }),
-    });
-
-    const data = await res.json();
-    setImage(data.imageUrl);
-    setVideo(null);
-    setLoading(false);
+    try {
+      const res = await axios.post(`${apiUrl}/image/generate`, { prompt });
+      setImage(res.data.imageUrl);
+      setVideo(null);
+    } catch (err) {
+      console.error("Error generating image:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const getData = useCallback(async () => {
     setLoading(true);
-
-    const res = await fetch(`${apiUrl}/image/get-data`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-     
-    });
-
-    const data = await res.json();
-    setData(data);
-    setLoading(false);
-  }, [setData]);
+    try {
+      const res = await axios.get(`${apiUrl}/about`);
+      setData(res.data);
+    } catch (err) {
+      console.error("Error fetching data:", err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
-    getData()
-  
-    return () => {
-      
-    }
-  }, [getData])
-  
+    getData();
+  }, [getData]);
 
   const generateVideo = async () => {
+    if (!image) return;
     setLoading(true);
 
-    const res = await fetch(`${apiUrl}/video/generate`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt, imageUrl: image }),
-    });
-
-    const data = await res.json();
-    setVideo(data.videoUrl);
-    setLoading(false);
+    try {
+      const res = await axios.post(`${apiUrl}/video/generate`, {
+        prompt,
+        imageUrl: image,
+      });
+      setVideo(res.data.videoUrl);
+    } catch (err) {
+      console.error("Error generating video:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -67,7 +63,6 @@ const AIDashboard = () => {
       {/* Header */}
       <header className="border-b border-gray-800 p-4 text-center text-lg font-semibold">
         AI Image → Video Generator
-       
       </header>
 
       {/* Main */}
@@ -128,12 +123,12 @@ const AIDashboard = () => {
             </div>
           )}
         </div>
-       
       </main>
 
       {/* Footer */}
       <footer className="text-center text-xs text-gray-500 py-4">
-        Built with React, Node.js & AI  <div> Data: {JSON.stringify(data)}</div>
+        Built with React, Node.js & AI
+        <div>Data: {JSON.stringify(data)}</div>
       </footer>
     </div>
   );

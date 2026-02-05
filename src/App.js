@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import Navbar from './components/Navbar';
 import AIDashboard from './pages/AIDashboard';
+import Dashboard from './pages/Dashboard';
 
 function App() {
   return (
@@ -11,7 +12,8 @@ function App() {
         <Navbar />
         <main className="container mx-auto px-4 py-8">
           <Routes>
-            <Route path="/" element={<AIDashboard />} />
+            <Route path="/" element={<Dashboard />} />
+             <Route path="/ai" element={<AIDashboard />} />
           </Routes>
         </main>
       </div>

@@ -24,6 +24,9 @@ const NavigationBar = () => {
         <Navbar.Link href="/" active>
           Home
         </Navbar.Link>
+             <Navbar.Link href="/ai" active>
+          AI
+        </Navbar.Link>
        
         {user?.role === 'admin' && (
           <Navbar.Link as={Link} to="/admin">
