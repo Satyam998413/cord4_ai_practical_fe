@@ -5,6 +5,8 @@ import { apiUrl } from '../const/api';
 function MessageList({ selectedConversation }) {
   const [messages, setMessages] = useState([]);
 
+  const currentUser = "You"; // Replace with logged-in user name or ID
+
   useEffect(() => {
     if (!selectedConversation) return;
 
@@ -14,7 +16,7 @@ function MessageList({ selectedConversation }) {
   }, [selectedConversation]);
 
   return (
-    <div className="w-full h-screen bg-blue-50 p-6 overflow-y-auto">
+    <div className="w-full h-screen bg-blue-50 p-6 overflow-y-auto flex flex-col">
 
       {!selectedConversation && (
         <div className="flex items-center justify-center h-full text-blue-400 text-lg">
@@ -22,22 +24,39 @@ function MessageList({ selectedConversation }) {
         </div>
       )}
 
-      {messages.map((msg, index) => (
-        <div
-          key={msg._id}
-          className="mb-4 animate-fadeUp"
-          style={{ animationDelay: `${index * 70}ms` }}
-        >
-          <div className="bg-blue-100 text-blue-900 p-4 rounded-2xl shadow-md max-w-lg transition-all duration-300 hover:scale-[1.02]">
-            <p className="text-sm font-bold mb-1 text-blue-700">
-              {msg.sender}
-            </p>
-            <p className="text-sm leading-relaxed">
-              {msg.content}
-            </p>
+      {messages.map((msg, index) => {
+        const isOwnMessage = msg.sender === currentUser;
+
+        return (
+          <div
+            key={msg._id}
+            className={`flex mb-4 animate-fadeUp ${
+              isOwnMessage ? 'justify-end' : 'justify-start'
+            }`}
+            style={{ animationDelay: `${index * 60}ms` }}
+          >
+            <div
+              className={`
+                p-4 rounded-2xl shadow-md max-w-xs md:max-w-md
+                transition-all duration-300 hover:scale-[1.02]
+                ${isOwnMessage
+                  ? 'bg-blue-500 text-white rounded-br-none'
+                  : 'bg-white text-blue-900 rounded-bl-none border border-blue-100'}
+              `}
+            >
+              <p className={`text-md mb-1 font-semibold ${
+                isOwnMessage ? 'text-blue-100' : 'text-blue-600'
+              }`}>
+                {msg.sender}
+              </p>
+
+              <p className="text-sm leading-relaxed">
+                {msg.content}
+              </p>
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
