@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { apiUrl } from "../const/api";
 
@@ -7,7 +7,7 @@ const AIDashboard = () => {
   const [image, setImage] = useState(null);
   const [video, setVideo] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState(null);
+  // const [data, setData] = useState(null);
 
   const generateImage = async () => {
     if (!prompt) return;
@@ -24,22 +24,22 @@ const AIDashboard = () => {
     }
   };
 
-  const getData = useCallback(async () => {
+  // const getData = useCallback(async () => {
 
-    setLoading(true);
-    try {
-      const res = await axios.get(`${apiUrl}/about`,{data});
-      setData(res.data);
-    } catch (err) {
-      console.error("Error fetching data:", err);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  //   setLoading(true);
+  //   try {
+  //     const res = await axios.get(`${apiUrl}/about`);
+  //     setData(res.data);
+  //   } catch (err) {
+  //     console.error("Error fetching data:", err);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }, []);
 
-  useEffect(() => {
-    getData();
-  }, [getData]);
+  // useEffect(() => {
+  //   getData();
+  // }, [getData]);
 
   const generateVideo = async () => {
     if (!image) return;
