@@ -16,16 +16,16 @@ const NavigationBar = () => {
     <Navbar fluid rounded>
       <Navbar.Brand as={Link} to="/">
         <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-          AI Image N Video Generator
+          Cord Practical Round
         </span>
       </Navbar.Brand>
       <Navbar.Toggle />
       <Navbar.Collapse>
         <Navbar.Link href="/" active>
-          Home
+        Unified Communication Connector
         </Navbar.Link>
              <Navbar.Link href="/ai" active>
-          AI
+          AI Generator
         </Navbar.Link>
        
         {user?.role === 'admin' && (
