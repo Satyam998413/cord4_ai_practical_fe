@@ -4,7 +4,7 @@ const apiUrl = "https://cord4-ai-practical-be.vercel.app/api";
 
 const AIDashboard = () => {
   const [prompt, setPrompt] = useState("");
-  const [image, setImage] = useState('https://images.pexels.com/photos/31256342/pexels-photo-31256342.jpeg?cs=srgb&dl=pexels-optical-chemist-340351297-31256342.jpg&fm=jpg');
+  const [image, setImage] = useState(null);
   const [video, setVideo] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -14,7 +14,10 @@ const AIDashboard = () => {
 
     const res = await fetch(`${apiUrl}/image/generate`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*"
+       },
       body: JSON.stringify({ prompt }),
     });
 
